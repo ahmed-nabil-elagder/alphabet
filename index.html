@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alphabet Cards with .jpg Images</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 15px;
+      width: 95%;
+      max-width: 800px;
+    }
+    .card {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+      user-select: none;
+    }
+    .card:hover {
+      background-color: #e0f0ff;
+      transform: scale(1.05);
+    }
+    .card img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin: 5px 0;
+    }
+    .letter {
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .sub-letter {
+      font-size: 30px;
+      color: #555;
+    }
+    .label {
+      font-size: 14px;
+      color: #333;
+      margin-top: 5px;
+    }
+    .header {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+<h1 class="header">🇬🇧 English Alphabet 🇬🇧</h1>
+
+<div class="container" id="cards-container"></div>
+
+<script>
+  const alphabetData = [
+    { letter: 'A', word: 'Apple', emoji: '🍎' },
+    { letter: 'B', word: 'Ball', emoji: '⚽' },
+    { letter: 'C', word: 'Cat', emoji: '🐱' },
+    { letter: 'D', word: 'Dog', emoji: '🐶' },
+    { letter: 'E', word: 'Elephant', emoji: '🐘' },
+    { letter: 'F', word: 'Fish', emoji: '🐟' },
+    { letter: 'G', word: 'Giraffe', emoji: '🦒' },
+    { letter: 'H', word: 'Hat', emoji: '🎩' },
+    { letter: 'I', word: 'Ice Cream', emoji: '🍦' },
+    { letter: 'J', word: 'Jellyfish', emoji: '🪼' },
+    { letter: 'K', word: 'Kangaroo', emoji: '🦘' },
+    { letter: 'L', word: 'Lion', emoji: '🦁' },
+    { letter: 'M', word: 'Monkey', emoji: '🐵' },
+    { letter: 'N', word: 'Noodles', emoji: '🍜' },
+    { letter: 'O', word: 'Orange', emoji: '🍊' },
+    { letter: 'P', word: 'Pencil', emoji: '✏️' },
+    { letter: 'Q', word: 'Queen', emoji: '👸' },
+    { letter: 'R', word: 'Rabbit', emoji: '🐰' },
+    { letter: 'S', word: 'Sun', emoji: '☀️' },
+    { letter: 'T', word: 'Tiger', emoji: '🐯' },
+    { letter: 'U', word: 'Umbrella', emoji: '☂️' },
+    { letter: 'V', word: 'Volcano', emoji: '🌋' },
+    { letter: 'W', word: 'Whale', emoji: '🐋' },
+    { letter: 'X', word: 'X mark', emoji: '❌' },
+    { letter: 'Y', word: 'Yacht', emoji: '🛥️' },
+    { letter: 'Z', word: 'Zebra', emoji: '🦓' },
+  ];
+
+  const container = document.getElementById('cards-container');
+
+  alphabetData.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+        <div class="letter">${item.letter} <span class="sub-letter">${item.letter.toLowerCase()}</span></div>
+        <div style="font-size: 40px;">${item.emoji}</div>
+        <div class="label">${item.word}</div>
+      `;
+    card.onclick = () => speakLetterSound(item.letter);
+    container.appendChild(card);
+  });
+
+  function speakLetterItSelf(letter) {
+    const utterance = new SpeechSynthesisUtterance(letter.toLowerCase());
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    speechSynthesis.cancel(); // Cancel any ongoing speech
+    speechSynthesis.speak(utterance);
+  }
+
+  function speakLetterSound(letter) {
+    // Normalize input
+    const normalized = letter.toLowerCase();
+
+    // Validate input: only a–z
+    if (!/^[a-z]$/.test(normalized)) {
+      console.warn(`Invalid letter: "${letter}"`);
+      return;
+    }
+
+    // // Construct a file path [offline]
+    // const audioPath = `letter_sounds/${normalized}_sound_female_UK.mp3`;
+
+    // Construct a file path [online]
+    const audioPath = `http://files.letterland.com/audio/letter-sounds/${normalized}_sound_female_UK.mp3`;
+
+    // Create and play audio
+    const audio = new Audio(audioPath);
+    audio.play().catch(error => {
+      console.error(`Failed to play sound for "${letter}":`, error);
+    });
+  }
+
+</script>
+</body>
+</html>
