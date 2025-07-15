@@ -127,7 +127,7 @@
 
   const container = document.getElementById('cards-container');
 
-  arabicAlphabet.forEach(item => {
+  arabicAlphabet.forEach((item, index) => {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
@@ -135,21 +135,20 @@
       <div style="font-size: 40px;">${item.emoji}</div>
       <div class="label">${item.word}</div>
     `;
-    card.onclick = () => speakLetterPhonetic(item.letter);
+    card.onclick = () => speakLetterPhonetic(index);
     container.appendChild(card);
   });
 
-  function speakLetterPhonetic(letter) {
+  function speakLetterPhonetic(index) {
 
-    if(letter === 'أ') { letter = 'ا';}
-    if(letter === 'ھ') { letter = 'ه';}
+    // Construct a file path [offline]
+    const audioPath = `letter_sounds_ar/${index+1}.m4a`;
 
-    // Use SpeechSynthesisUtterance with Arabic locale
-    const utterance = new SpeechSynthesisUtterance(letter);
-    utterance.lang = 'ar-SA';
-    utterance.rate = 0.8;
-    speechSynthesis.cancel(); // Cancel any ongoing speech
-    speechSynthesis.speak(utterance);
+    // Create and play audio
+    const audio = new Audio(audioPath);
+    audio.play().catch(error => {
+      console.error(`Failed to play sound for letter index "${index+1}":`, error);
+    });
   }
 </script>
 </body>
