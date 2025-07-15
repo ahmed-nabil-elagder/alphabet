@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>بطاقات الأبجدية العربية</title>
+  <!-- favicon as an emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇸🇦</text></svg>">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f0f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px 10px;
+      direction: rtl;
+      text-align: center;
+    }
+
+    .header {
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+      margin: 10px 0 20px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 15px;
+      width: 95%;
+      max-width: 800px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 15px 10px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+      user-select: none;
+    }
+
+    .card:hover {
+      background-color: #e0f0ff;
+      transform: scale(1.05);
+    }
+
+    .letter {
+      font-size: 48px;
+      font-weight: bold;
+      color: #222;
+      margin-bottom: 5px;
+    }
+
+    .label {
+      font-size: 16px;
+      color: #555;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+<h1 class="header">🇸🇦 الأبجدية العربية 🇸🇦</h1>
+
+<div class="container" id="cards-container"></div>
+
+<script>
+  // Arabic letters with example words and emojis where possible
+  const arabicAlphabet = [
+    { letter: 'أ', word: 'أسد', emoji: '🦁' },     // Alif - Lion
+    { letter: 'ب', word: 'بطة', emoji: '🦆' },     // Ba - Duck
+    { letter: 'ت', word: 'تفاح', emoji: '🍎' },    // Ta - Apple
+    { letter: 'ث', word: 'ثعلب', emoji: '🦊' },    // Tha - Fox
+    { letter: 'ج', word: 'جمل', emoji: '🐫' },     // Jeem - Camel
+    { letter: 'ح', word: 'حصان', emoji: '🐎' },    // Ha - Horse
+    { letter: 'خ', word: 'خروف', emoji: '🐑' },    // Kha - Sheep
+    { letter: 'د', word: 'دب', emoji: '🐻' },      // Dal - Bear
+    { letter: 'ذ', word: 'ذهب', emoji: '🥇' },     // Thal - Gold
+    { letter: 'ر', word: 'ريشة', emoji: '🪶' },    // Ra - Feather
+    { letter: 'ز', word: 'زرافة', emoji: '🦒' },   // Zay - Giraffe
+    { letter: 'س', word: 'سمك', emoji: '🐟' },     // Seen - Fish
+    { letter: 'ش', word: 'شمس', emoji: '☀️' },     // Sheen - Sun
+    { letter: 'ص', word: 'صقر', emoji: '🦅' },     // Sad - Falcon
+    { letter: 'ض', word: 'ضفدع', emoji: '🐸' },    // Dad - Frog
+    { letter: 'ط', word: 'طاووس', emoji: '🦚' },   // Ta - Peacock
+    { letter: 'ظ', word: 'ظرف', emoji: '✉️' },     // Dha - Envelope
+    { letter: 'ع', word: 'عنب', emoji: '🍇' },     // Ain - Grapes
+    { letter: 'غ', word: 'غزال', emoji: '🦌' },    // Ghain - Gazelle
+    { letter: 'ف', word: 'فيل', emoji: '🐘' },     // Fa - Elephant
+    { letter: 'ق', word: 'قرد', emoji: '🐵' },     // Qaf - Monkey
+    { letter: 'ك', word: 'كلب', emoji: '🐶' },     // Kaf - Dog
+    { letter: 'ل', word: 'ليمون', emoji: '🍋' },   // Lam - Lemon
+    { letter: 'م', word: 'موز', emoji: '🍌' },     // Meem - Banana
+    { letter: 'ن', word: 'نمر', emoji: '🐅' },     // Noon - Tiger
+    { letter: 'ھ', word: 'هدهد', emoji: '🐦' },    // Ha - Hoopoe
+    { letter: 'و', word: 'وردة', emoji: '🌹' },    // Waw - Rose
+    { letter: 'ي', word: 'يد', emoji: '✋' },       // Ya - Hand
+  ];
+
+  const container = document.getElementById('cards-container');
+
+  arabicAlphabet.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="letter">${item.letter}</div>
+      <div style="font-size: 40px;">${item.emoji}</div>
+      <div class="label">${item.word}</div>
+    `;
+    card.onclick = () => speakLetterPhonetic(item.letter);
+    container.appendChild(card);
+  });
+
+  function speakLetterPhonetic(letter) {
+
+    if(letter === 'أ') { letter = 'ا';}
+    if(letter === 'ھ') { letter = 'ه';}
+
+    // Use SpeechSynthesisUtterance with Arabic locale
+    const utterance = new SpeechSynthesisUtterance(letter);
+    utterance.lang = 'ar-SA';
+    utterance.rate = 0.8;
+    speechSynthesis.cancel(); // Cancel any ongoing speech
+    speechSynthesis.speak(utterance);
+  }
+</script>
+</body>
+</html>
