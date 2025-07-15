@@ -251,11 +251,11 @@
       return;
     }
 
-    // // Construct a file path [offline]
-    // const audioPath = `letter_sounds/${normalized}_sound_female_UK.mp3`;
+    // Construct a file path [offline]
+    const audioPath = `letter_sounds_en/${normalized}_sound_female_UK.mp3`;
 
-    // Construct a file path [online]
-    const audioPath = `https://files.letterland.com/audio/letter-sounds/${normalized}_sound_female_UK.mp3`;
+    // // Construct a file path [online]
+    // const audioPath = `https://files.letterland.com/audio/letter-sounds/${normalized}_sound_female_UK.mp3`;
 
     // Create and play audio
     const audio = new Audio(audioPath);
